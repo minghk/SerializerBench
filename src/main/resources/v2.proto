@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package tutorial;
+
+option java_package = "ming.protobuf";
+option java_outer_classname = "TradeMessagesV2";
+
+enum Side{
+  BUY = 0;
+  SELL = 1;
+}
+
+enum OrdType{
+  LIMIT = 0;
+  MKT = 1;
+}
+
+message NewOrder {
+  string clOrdId = 1;
+  string symbol = 2;
+  uint64 px = 3;
+  uint64 qty = 4;
+  string dest = 5;
+  Side side = 6;
+  OrdType ordType = 7;
+  string account = 8;
+}
+
