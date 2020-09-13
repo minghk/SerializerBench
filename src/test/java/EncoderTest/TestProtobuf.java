@@ -37,12 +37,21 @@ public class TestProtobuf {
         v2.build().writeTo(outputStream);
         outputStream.flush();
 
-        int hashOld = Objects.hash(v2.getClOrdId(), v2.getPx(), v2.getQty(), v2.getSide().toString(), v2.getOrdType().toString());
+        int hashOld = v2.getClOrdId().hashCode();
+        hashOld += v2.getPx();
+        hashOld += v2.getQty();
+        hashOld += v2.getSide().toString().hashCode();
+        hashOld += v2.getOrdType().toString().hashCode();
+
         buf.flip();
         TradeMessages.NewOrder vOrder = TradeMessages.NewOrder.parseFrom(buf);
         buf.position(buf.limit());
         buf.compact();
-        int hashNew = Objects.hash(vOrder.getClOrdId(), vOrder.getPx(), vOrder.getQty(), vOrder.getSide().toString(), vOrder.getOrdType().toString());
+        int hashNew = vOrder.getClOrdId().hashCode();
+        hashNew += vOrder.getPx();
+        hashNew += vOrder.getQty();
+        hashNew += vOrder.getSide().toString().hashCode();
+        hashNew += vOrder.getOrdType().toString().hashCode();
         if(hashOld != hashNew){
             throw new RuntimeException("XXX!!");
         }

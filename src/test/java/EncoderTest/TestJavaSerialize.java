@@ -49,22 +49,4 @@ public class TestJavaSerialize {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        double avg = 0;
-        double javaSerializer = runTest();
-        avg = javaSerializer / 10000000 * 1_000_000;
-        System.out.println("JavaSerialize:" + javaSerializer + " Avg(microsecond):" + avg);
-
-        double protobuf = TestProtobuf.run();
-        avg = protobuf / 10000000 * 1_000_000;
-        System.out.println("ProtoBuf:" + protobuf + " Avg(microsecond):" + avg);
-
-        double sbe = TestSBE.run();
-        avg = sbe / 10000000 * 1_000_000;
-        System.out.println("SBE Normal:" + sbe + " Avg(microsecond):" + avg);
-
-        double sbeNoGC = TestSBENoGC.run();
-        avg = sbeNoGC / 10000000 * 1_000_000;
-        System.out.println("SBE NoGC:" + sbe + " Avg(microsecond):" + avg);
-    }
 }

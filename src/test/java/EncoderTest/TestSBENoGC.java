@@ -26,9 +26,11 @@ public class TestSBENoGC {
         byte[] clOrdBuff = new byte[com.example.sbe2.NewOrderSingleEncoder.clOrdIdEncodingLength()];
         Arrays.fill(clOrdBuff,(byte)0);
 
-        int hashOld = Objects.hash(
-                Arrays.hashCode(clOrdIdValue),
-                1000, 1000, SideEnum.Buy.toString(), "Limit");
+        int hashOld = Arrays.hashCode(clOrdIdValue);
+        hashOld += 1000;
+        hashOld += 1000;
+        hashOld += SideEnum.Buy.toString().hashCode();
+        hashOld += "Limit".hashCode();
 
         for (int j = 0; j < 10000 ; j++) {
             runTest(buffer, headerEncoder2, orderSingleEncoder2, headerDecoder, orderSingleDecoder, clOrdIdValue, clOrdBuff, hashOld);
@@ -42,7 +44,6 @@ public class TestSBENoGC {
 
         }
         long end = System.nanoTime();
-        System.out.println("Cost = " + (end - start) * 1.0/1_000_000_000);
         return (end - start) * 1.0/1_000_000_000;
     }
 
@@ -60,11 +61,14 @@ public class TestSBENoGC {
 
         orderSingleDecoder.getClOrdId(clOrdBuff,0);
 
-        int hashNew = Objects.hash(
-                Arrays.hashCode(clOrdBuff),
-                orderSingleDecoder.price(), orderSingleDecoder.ordQty(), orderSingleDecoder.side().toString(), orderSingleDecoder.ordType().toString());
+        int h = Arrays.hashCode(clOrdBuff);
+        h += orderSingleDecoder.price();
+        h += orderSingleDecoder.ordQty();
+        h += orderSingleDecoder.side().toString().hashCode();
+        h += orderSingleDecoder.ordType().toString().hashCode();
 
-        if(hashOld != hashNew){
+//
+        if(hashOld != h){
             throw new RuntimeException("XXX!!");
         }
     }
